@@ -1,0 +1,1237 @@
+/* ==============================================
+   GABRIEL — PORTFÓLIO
+   style.css
+
+   Organização:
+   1. Variáveis de tema (claro e escuro)
+   2. Reset e base
+   3. Cursor personalizado
+   4. Barra de progresso
+   5. Layout geral
+   6. Tipografia compartilhada
+   7. Navegação
+   8. Hero
+   9. Marquee (faixa de tags)
+   10. Sobre
+   11. Habilidades
+   12. Projetos
+   13. Roadmap
+   14. Contato
+   15. Rodapé
+   16. Animações
+   17. Responsivo
+============================================== */
+
+
+/* ==============================================
+   1. VARIÁVEIS DE TEMA
+
+   A ideia é simples: tudo que muda entre claro
+   e escuro vira uma variável. Assim um único
+   atributo data-theme no <html> troca tudo.
+
+   ATENÇÃO — seções "invertidas" (habilidades e
+   contato) têm variáveis próprias: --inv-bg e
+   --inv-fg. Isso evita o bug onde essas seções
+   ficavam com cor errada ao trocar de tema.
+============================================== */
+
+:root,
+[data-theme="light"] {
+  /* fundos */
+  --bg:        #f7f4ef;   /* fundo principal — creme quente */
+  --bg-alt:    #eeebe4;   /* seções alternadas */
+  --bg-card:   #ffffff;   /* cards brancos */
+  --surface:   #edeae3;   /* superfícies sutis */
+
+  /* texto */
+  --ink:       #0f0e0b;   /* texto principal */
+  --ink-2:     #3b3930;   /* texto secundário */
+  --muted:     #9b9488;   /* labels, texto apagado */
+
+  /* bordas */
+  --line:      #dedad2;
+
+  /* verde — cor de destaque */
+  --accent:    #1b4332;
+  --accent-2:  #2d6a4f;
+  --accent-glow: rgba(45, 106, 79, .15);
+
+  /* chips de tecnologia */
+  --chip-bg:   #e4e0d8;
+  --chip-fg:   #6b6860;
+
+  /* seções invertidas (habilidades + contato)
+     no claro: fundo escuro fixo, texto claro fixo */
+  --inv-bg:    #111009;
+  --inv-bg-card: #1a1917;
+  --inv-fg:    #f0ece4;
+  --inv-muted: #6a6760;
+  --inv-line:  #2a2825;
+}
+
+[data-theme="dark"] {
+  /* fundos */
+  --bg:        #0c0d0b;
+  --bg-alt:    #111210;
+  --bg-card:   #161714;
+  --surface:   #1c1e1a;
+
+  /* texto */
+  --ink:       #f0ece4;
+  --ink-2:     #b8b3a8;
+  --muted:     #5c5a54;
+
+  /* bordas */
+  --line:      #272824;
+
+  /* verde — mais claro no escuro pra ter contraste */
+  --accent:    #52b788;
+  --accent-2:  #74c69d;
+  --accent-glow: rgba(82, 183, 136, .12);
+
+  /* chips */
+  --chip-bg:   #1e201c;
+  --chip-fg:   #7a7870;
+
+  /* seções invertidas
+     no escuro: fundo levemente mais claro que o bg,
+     texto claro — mesmo esquema mas adaptado */
+  --inv-bg:    #050604;
+  --inv-bg-card: #0e0f0c;
+  --inv-fg:    #e8e4dc;
+  --inv-muted: #5a5854;
+  --inv-line:  #1e1f1c;
+}
+
+
+/* ==============================================
+   2. RESET E BASE
+   Zerando o que o browser coloca por padrão
+============================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  cursor: none !important; /* cursor padrão some, usamos o personalizado */
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+  /* transição suave ao trocar de tema */
+  transition: background-color .4s ease, color .4s ease;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+
+/* ==============================================
+   3. CURSOR PERSONALIZADO
+   Ponto pequeno que segue o mouse na hora.
+   Anel que acompanha com lag suave (feito no JS).
+============================================== */
+
+#cur {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none; /* não interfere em cliques */
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .15s, height .15s, background .3s;
+}
+
+#cur-ring {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--accent-2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  opacity: .55;
+  transition: width .3s ease, height .3s ease, opacity .3s, border-color .3s;
+}
+
+/* anel cresce ao passar em cima de link ou botão */
+body:has(a:hover) #cur-ring,
+body:has(button:hover) #cur-ring {
+  width: 46px;
+  height: 46px;
+  opacity: .9;
+}
+
+
+/* ==============================================
+   4. BARRA DE PROGRESSO DE LEITURA
+   Fica no topo e cresce conforme a pessoa rola
+============================================== */
+
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 500;
+  transition: width .1s linear;
+}
+
+
+/* ==============================================
+   5. LAYOUT GERAL
+============================================== */
+
+/* container central com padding lateral */
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 52px;
+}
+
+section { padding: 108px 0; }
+
+
+/* ==============================================
+   6. TIPOGRAFIA COMPARTILHADA
+   Componentes que se repetem em várias seções
+============================================== */
+
+/* label pequena com linha decorativa */
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 52px;
+}
+
+/* linha que cresce depois do texto */
+.section-tag::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* título de seção — serifa pra dar peso visual */
+.section-heading {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px, 4.2vw, 58px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  margin-bottom: 40px;
+}
+
+/* itálico colorido dentro dos títulos */
+.section-heading em {
+  font-style: italic;
+  color: var(--accent-2);
+  font-weight: 300;
+}
+
+
+/* ==============================================
+   7. NAVEGAÇÃO
+============================================== */
+
+#nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 22px 0;
+  transition: background .35s ease, border-color .35s ease, padding .35s;
+}
+
+/* ao rolar: fundo fosco com blur */
+#nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 16px 0;
+}
+
+.nav-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.nav-logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: .04em;
+  transition: color .2s;
+  white-space: nowrap;
+}
+
+.nav-logo span  { color: var(--accent-2); }
+.nav-logo:hover { color: var(--accent-2); }
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: lowercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+  position: relative;
+}
+
+/* sublinhado que cresce da esquerda no hover */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent-2);
+  transition: width .25s ease;
+}
+
+.nav-links a:hover          { color: var(--ink); }
+.nav-links a:hover::after   { width: 100%; }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* bolinha pulsante + texto de status */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--accent-2);
+  letter-spacing: .07em;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  animation: pulse 2.2s ease infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .3; transform: scale(.8); }
+}
+
+/* botão de trocar tema — forma de pílula */
+#theme-toggle {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--ink);
+  transition: background .25s, border-color .25s, transform .15s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+#theme-toggle:hover {
+  background: var(--bg-alt);
+  border-color: var(--muted);
+  transform: translateY(-1px);
+}
+
+/* mostra só o ícone do tema oposto ao atual */
+[data-theme="light"] .theme-icon-dark  { display: none; }
+[data-theme="dark"]  .theme-icon-light { display: none; }
+
+
+/* ==============================================
+   8. HERO — primeira dobra da página
+============================================== */
+
+.hero {
+  min-height: 100dvh; /* dvh considera a barra do navegador mobile */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 90px;
+}
+
+/* grid: texto à esquerda, cards à direita */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 64px;
+  align-items: center;
+  flex: 1;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp .7s ease .1s forwards;
+}
+
+/* traço horizontal antes do eyebrow */
+.eyebrow-line {
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+/* título grande animado linha por linha */
+.hero-heading {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(40px, 6.5vw, 96px);
+  font-weight: 600;
+  line-height: 1.03;
+  letter-spacing: -.03em;
+  margin-bottom: 36px;
+}
+
+/* overflow hidden em cada linha pra o slide funcionar */
+.h-line  { display: block; overflow: hidden; }
+
+.h-inner {
+  display: block;
+  opacity: 0;
+  transform: translateY(60px);
+  animation: slideUp .9s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+/* cada linha entra um pouco depois da anterior */
+.h-line:nth-child(1) .h-inner { animation-delay: .28s; }
+.h-line:nth-child(2) .h-inner { animation-delay: .42s; }
+.h-line:nth-child(3) .h-inner { animation-delay: .56s; }
+.h-line:nth-child(4) .h-inner { animation-delay: .70s; }
+
+.hero-heading em {
+  font-style: italic;
+  color: var(--accent-2);
+  font-weight: 300;
+}
+
+.hero-desc {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  line-height: 1.85;
+  max-width: 480px;
+  margin-bottom: 44px;
+  opacity: 0;
+  animation: fadeUp .7s ease .82s forwards;
+}
+
+.hero-desc strong { color: var(--ink); font-weight: 600; }
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .7s ease .96s forwards;
+}
+
+/* grid 2x2 dos cards de info rápida */
+.hero-aside {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  opacity: 0;
+  animation: fadeUp .8s ease 1.05s forwards;
+}
+
+.hero-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  padding: 24px 22px;
+  transition: border-color .25s, transform .25s;
+}
+
+.hero-card:hover {
+  border-color: var(--accent-2);
+  transform: translateY(-2px);
+}
+
+.hero-card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.hero-card-val {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* rodapé do hero: disponibilidade + links sociais */
+.hero-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .6s ease 1.2s forwards;
+}
+
+.hero-footer-txt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .07em;
+}
+
+.hero-socials { display: flex; gap: 24px; }
+
+.hero-socials a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: .08em;
+  transition: color .2s;
+}
+
+.hero-socials a:hover { color: var(--accent-2); }
+
+
+/* BOTÕES — usados no hero e em outros lugares */
+
+.btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  text-transform: lowercase;
+  text-decoration: none;
+  padding: 14px 28px;
+  border: 1.5px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background .22s, color .22s, border-color .22s, transform .18s, box-shadow .22s;
+  white-space: nowrap;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+.btn-ghost:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+
+/* ==============================================
+   9. MARQUEE — faixa de tags deslizando
+============================================== */
+
+.marquee-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 52px;
+  animation: marquee 22s linear infinite;
+  white-space: nowrap;
+}
+
+/* pausa no hover — bom pra ler as tags com calma */
+.marquee-track:hover { animation-play-state: paused; }
+
+.mq {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--muted);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 52px;
+}
+
+/* ponto separador entre cada item */
+.mq::after {
+  content: '·';
+  color: var(--accent-2);
+  font-style: normal;
+}
+
+
+/* ==============================================
+   10. SOBRE
+============================================== */
+
+#sobre { background: var(--bg-alt); }
+
+/* duas colunas: título grudado | texto que rola */
+.sobre-grid {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* título fica fixo enquanto o texto da direita sobe */
+.sobre-left .section-heading {
+  position: sticky;
+  top: 120px;
+  margin-bottom: 0;
+}
+
+.sobre-right p {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  line-height: 1.9;
+  margin-bottom: 22px;
+}
+
+.sobre-right p:last-of-type { margin-bottom: 0; }
+.sobre-right strong { color: var(--ink); font-weight: 600; }
+
+/* grid de infos rápidas tipo cartão de visita */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 40px;
+}
+
+.info-item {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.info-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+
+/* ==============================================
+   11. HABILIDADES
+
+   CORREÇÃO DO BUG DE TEMA:
+   Essa seção tem fundo sempre escuro, independente
+   do tema. Por isso não usa var(--ink) nem var(--bg)
+   direto — usa var(--inv-bg) e var(--inv-fg) que são
+   variáveis dedicadas pra seções invertidas.
+   Assim no tema escuro o fundo fica ainda mais escuro
+   (não branco), e o texto continua claro.
+============================================== */
+
+.skills-section {
+  background: var(--inv-bg);
+  color: var(--inv-fg);
+}
+
+/* section-tag adaptada pro fundo escuro */
+.skills-section .section-tag {
+  color: var(--inv-muted);
+}
+.skills-section .section-tag::after {
+  background: var(--inv-line);
+}
+
+/* cabeçalho em duas colunas: título | descrição */
+.skills-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 64px;
+  align-items: end;
+}
+
+.skills-intro .section-heading {
+  color: var(--inv-fg);
+  margin-bottom: 0;
+}
+
+.skills-intro .section-heading em { color: var(--accent-2); }
+
+.skills-intro-desc {
+  font-size: 15px;
+  color: var(--inv-muted);
+  line-height: 1.85;
+}
+
+/* grid 3 colunas dos cards de habilidade */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.skill-card {
+  background: var(--inv-bg-card);
+  border: 1px solid var(--inv-line);
+  padding: 32px 28px;
+  transition: border-color .25s, background .25s;
+}
+
+.skill-card:hover {
+  border-color: var(--accent-2);
+  background: color-mix(in srgb, var(--inv-bg-card) 80%, var(--accent) 5%);
+}
+
+/* card tracejado = próximo foco, ainda não comecei */
+.skill-card-next { border-style: dashed; opacity: .7; }
+
+.skill-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.skill-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.skill-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--inv-muted);
+}
+
+.skill-name {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--inv-fg); /* sempre claro, independente do tema */
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+
+.skill-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--inv-muted);
+  line-height: 1.65;
+}
+
+/* barrinha de nível — começa em 0, JS define o valor */
+.skill-bar {
+  margin-top: 22px;
+  height: 2px;
+  background: var(--inv-line);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--accent-2);
+  width: 0%;
+  transition: width 1.1s cubic-bezier(.16, 1, .3, 1);
+}
+
+
+/* ==============================================
+   12. PROJETOS
+============================================== */
+
+.proj-list { display: flex; flex-direction: column; gap: 2px; }
+
+.proj-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 36px;
+  align-items: start;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  padding: 36px 40px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .25s, background .25s, transform .22s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* barra vertical colorida que aparece no hover */
+.proj-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent-2);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .3s ease;
+}
+
+.proj-item:hover {
+  border-color: color-mix(in srgb, var(--accent-2) 30%, var(--line));
+  background: var(--bg-alt);
+  transform: translateX(4px);
+}
+
+.proj-item:hover::before { transform: scaleY(1); }
+
+.proj-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 100px;
+}
+
+.proj-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: .1em;
+}
+
+.proj-chips { display: flex; flex-direction: column; gap: 6px; }
+
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  display: inline-block;
+  width: fit-content;
+}
+
+.proj-body { flex: 1; }
+
+.proj-name {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.proj-desc {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  line-height: 1.75;
+}
+
+.proj-arrow {
+  font-size: 22px;
+  color: var(--accent-2);
+  transition: transform .2s ease;
+  margin-top: 4px;
+}
+
+/* setinha vai em diagonal no hover */
+.proj-item:hover .proj-arrow { transform: translate(4px, -4px); }
+
+
+/* ==============================================
+   13. ROADMAP
+============================================== */
+
+#roadmap { background: var(--bg-alt); }
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+.roadmap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  padding: 32px 28px;
+  transition: border-color .25s, transform .22s;
+}
+
+.roadmap-card:hover { transform: translateY(-3px); }
+
+.road-icon {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 18px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.road-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.road-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+
+.road-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+/* cada estágio tem uma cor diferente na borda e no label */
+.roadmap-done  { border-color: var(--accent-2); }
+.roadmap-done  .road-label,
+.roadmap-done  .road-icon  { color: var(--accent-2); }
+
+.roadmap-doing { border-color: color-mix(in srgb, var(--accent-2) 50%, var(--line)); }
+.roadmap-doing .road-label,
+.roadmap-doing .road-icon  { color: var(--accent-2); }
+
+.roadmap-next  .road-label,
+.roadmap-next  .road-icon  { color: var(--muted); }
+
+.roadmap-future             { opacity: .7; }
+.roadmap-future .road-label,
+.roadmap-future .road-icon  { color: var(--muted); opacity: .6; }
+
+
+/* ==============================================
+   14. CONTATO
+
+   Mesma lógica da seção de habilidades:
+   fundo sempre escuro, usa variáveis --inv-*
+   pra não quebrar ao trocar de tema.
+============================================== */
+
+.contact-section { background: var(--inv-bg); }
+
+/* section-tag no fundo escuro */
+.contact-section .section-tag {
+  color: var(--inv-muted);
+}
+.contact-section .section-tag::after {
+  background: var(--inv-line);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.contact-heading {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px, 4.5vw, 62px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  color: var(--inv-fg); /* sempre claro independente do tema */
+  margin-bottom: 24px;
+}
+
+.contact-heading em {
+  font-style: italic;
+  color: var(--accent-2);
+  font-weight: 300;
+}
+
+.contact-sub {
+  font-size: 15px;
+  color: var(--inv-muted);
+  line-height: 1.8;
+}
+
+.contact-links { display: flex; flex-direction: column; }
+
+/* links de contato com deslize pra direita no hover */
+.clink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--inv-line);
+  text-decoration: none;
+  color: var(--inv-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  transition: color .2s, padding-left .28s;
+}
+
+.clink:first-child { border-top: 1px solid var(--inv-line); }
+
+.clink:hover { color: var(--inv-fg); padding-left: 10px; }
+.clink:hover .clink-arrow { color: var(--accent-2); }
+
+.clink-arrow {
+  font-size: 18px;
+  color: var(--inv-line);
+  transition: color .2s, transform .2s;
+}
+
+.clink:hover .clink-arrow { transform: translate(3px, -3px); }
+
+
+/* ==============================================
+   15. RODAPÉ
+   Continua no mesmo fundo escuro do contato
+============================================== */
+
+footer {
+  background: var(--inv-bg);
+  border-top: 1px solid var(--inv-line);
+  padding: 32px 0;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--inv-muted);
+  letter-spacing: .07em;
+  opacity: .6;
+}
+
+.footer-links { display: flex; gap: 22px; }
+
+.footer-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--inv-muted);
+  text-decoration: none;
+  letter-spacing: .07em;
+  opacity: .6;
+  transition: color .2s, opacity .2s;
+}
+
+.footer-links a:hover { color: var(--accent-2); opacity: 1; }
+
+
+/* ==============================================
+   16. ANIMAÇÕES
+============================================== */
+
+/* elementos que aparecem ao rolar */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* fade simples pra cima */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* slide mais forte — usado no título do hero */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(60px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* loop infinito da marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+
+/* ==============================================
+   17. RESPONSIVO
+
+   Quebras:
+   - 960px  → tablet deitado / notebook pequeno
+   - 720px  → tablet em pé
+   - 480px  → celular
+============================================== */
+
+@media (max-width: 960px) {
+  /* menos padding lateral em telas menores */
+  .wrap, .nav-inner { padding: 0 28px; }
+
+  section { padding: 80px 0; }
+
+  /* hero vira coluna única */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  /* os 4 cards ficam em linha no tablet */
+  .hero-aside { grid-template-columns: repeat(4, 1fr); }
+
+  /* links de nav e status somem — espaço curto no mobile */
+  .nav-links, .status-badge { display: none; }
+
+  /* grids de duas colunas viram uma */
+  .sobre-grid,
+  .skills-intro,
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+
+  /* sticky no título sobre não faz sentido em coluna única */
+  .sobre-left .section-heading { position: static; }
+
+  /* habilidades: 2 colunas no tablet */
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+
+  /* roadmap: 2 colunas no tablet */
+  .roadmap-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 720px) {
+  /* cards do hero em 2x2 */
+  .hero-aside { grid-template-columns: 1fr 1fr; }
+
+  /* habilidades: 1 coluna */
+  .skills-grid { grid-template-columns: 1fr; }
+
+  /* info do sobre: 1 coluna */
+  .info-grid { grid-template-columns: 1fr; }
+
+  /* roadmap: 1 coluna */
+  .roadmap-grid { grid-template-columns: 1fr; }
+
+  /* projetos: empilha tudo */
+  .proj-item {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 28px 24px;
+  }
+
+  /* meta do projeto vira linha horizontal */
+  .proj-meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* chips em linha */
+  .proj-chips { flex-direction: row; flex-wrap: wrap; }
+
+  /* setinha some no mobile (fica estranho) */
+  .proj-arrow { display: none; }
+}
+
+@media (max-width: 480px) {
+  .wrap, .nav-inner { padding: 0 20px; }
+
+  section { padding: 64px 0; }
+
+  /* título do hero menor no celular */
+  .hero-heading { font-size: clamp(36px, 10vw, 52px); }
+
+  /* hero footer empilha */
+  .hero-footer { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* rodapé empilha */
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+
+  /* título de contato menor */
+  .contact-heading { font-size: clamp(26px, 8vw, 40px); }
+
+  /* botões empilham no celular pequenininho */
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+}

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gabriel — Estudante de Engenharia de Software focado em Python e backend. Buscando estágio no DF." />
+  <title>Gabriel — Dev Backend em formação</title>
+
+  <!-- Fontes do Google: Fraunces (serifa elegante), Instrument Sans (corpo), JetBrains Mono (código/labels) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Cursor personalizado (o ponto e o anel que seguem o mouse) -->
+  <div id="cur" aria-hidden="true"></div>
+  <div id="cur-ring" aria-hidden="true"></div>
+
+  <!-- Barra de progresso de leitura no topo da página -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <!-- =============================================
+       NAVEGAÇÃO
+  ============================================= -->
+  <header id="nav">
+    <div class="nav-inner">
+
+      <!-- Logo / nome no canto esquerdo -->
+      <a href="#inicio" class="nav-logo">gabriel<span>.py</span></a>
+
+      <!-- Links de navegação (some no mobile) -->
+      <nav aria-label="Navegação principal">
+        <ul class="nav-links">
+          <li><a href="#sobre">sobre</a></li>
+          <li><a href="#habilidades">habilidades</a></li>
+          <li><a href="#projetos">projetos</a></li>
+          <li><a href="#contato">contato</a></li>
+        </ul>
+      </nav>
+
+      <!-- Lado direito: status + botão de tema -->
+      <div class="nav-right">
+        <div class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          disponível para estágio
+        </div>
+        <button id="theme-toggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+          <span class="theme-icon-light">☀</span>
+          <span class="theme-icon-dark">☽</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =============================================
+       HERO — primeira dobra da página
+  ============================================= -->
+  <section id="inicio" class="hero">
+    <div class="wrap hero-grid">
+
+      <!-- Texto principal à esquerda -->
+      <div class="hero-content">
+        <p class="hero-eyebrow">
+          <span class="eyebrow-line"></span>
+          Eng. de Software · CEUB · Taguatinga, DF
+        </p>
+
+        <!-- Título animado linha por linha -->
+        <h1 class="hero-heading">
+          <span class="h-line"><span class="h-inner">Ainda não tenho</span></span>
+          <span class="h-line"><span class="h-inner"><em>anos de empresa.</em></span></span>
+          <span class="h-line"><span class="h-inner">Tenho algo melhor:</span></span>
+          <span class="h-line"><span class="h-inner">vontade real.</span></span>
+        </h1>
+
+        <p class="hero-desc">
+          Sou Gabriel. Estudo <strong>Engenharia de Software no CEUB</strong>, programo em
+          <strong>Python</strong> e quero construir minha carreira no
+          <strong>desenvolvimento backend</strong>. Busco um estágio onde eu possa
+          aprender muito — e contribuir de verdade.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#contato" class="btn btn-primary">
+            <span>me contate</span>
+            <!-- Setinha do botão primário -->
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#projetos" class="btn btn-ghost">ver projetos</a>
+        </div>
+      </div>
+
+      <!-- Cards de info rápida à direita -->
+      <div class="hero-aside">
+        <div class="hero-card">
+          <div class="hero-card-label">foco atual</div>
+          <div class="hero-card-val">Python &amp; Backend</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-label">próximo passo</div>
+          <div class="hero-card-val">Docker</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-label">objetivo</div>
+          <div class="hero-card-val">Estágio em Dev</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-label">disponibilidade</div>
+          <div class="hero-card-val">Imediata ✓</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Rodapé do hero: disponibilidade + links sociais -->
+    <div class="hero-footer wrap">
+      <span class="hero-footer-txt">aberto a presencial ou remoto · df e região</span>
+      <div class="hero-socials">
+        <a href="https://github.com/zkkas/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gabriel@email.com">E-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Faixa de tags deslizando (infinita, pausa no hover) -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="mq">Python</span>
+      <span class="mq">Backend</span>
+      <span class="mq">APIs REST</span>
+      <span class="mq">SQL</span>
+      <span class="mq">Git</span>
+      <span class="mq">Linux</span>
+      <span class="mq">Docker — em breve</span>
+      <span class="mq">CEUB · Eng. de Software</span>
+      <span class="mq">Lógica de programação</span>
+      <!-- Duplicado pra o loop ficar contínuo sem pular -->
+      <span class="mq">Python</span>
+      <span class="mq">Backend</span>
+      <span class="mq">APIs REST</span>
+      <span class="mq">SQL</span>
+      <span class="mq">Git</span>
+      <span class="mq">Linux</span>
+      <span class="mq">Docker — em breve</span>
+      <span class="mq">CEUB · Eng. de Software</span>
+      <span class="mq">Lógica de programação</span>
+    </div>
+  </div>
+
+  <!-- =============================================
+       SOBRE
+  ============================================= -->
+  <section id="sobre">
+    <div class="wrap">
+      <p class="section-tag reveal">sobre</p>
+
+      <div class="sobre-grid">
+
+        <!-- Título grudado no topo enquanto o texto da direita rola (sticky) -->
+        <div class="sobre-left reveal">
+          <h2 class="section-heading">
+            Honesto sobre<br />o que sei. <em>Ambicioso</em><br />sobre o que quero.
+          </h2>
+        </div>
+
+        <!-- Texto + cards de info -->
+        <div class="sobre-right reveal">
+          <p>
+            Primeiro semestre de <strong>Engenharia de Software no CEUB, Taguatinga</strong>.
+            Sim, estou começando — e esse é exatamente o ponto. Não carrego vícios de quem
+            aprendeu errado. Carrego curiosidade, disciplina e uma obsessão crescente por
+            entender como sistemas funcionam por baixo dos panos.
+          </p>
+          <p>
+            Minha linguagem é <strong>Python</strong>. Não apenas "sei a sintaxe" — já usei de
+            verdade: scripts de automação, consumo de APIs, manipulação de dados, persistência com
+            SQLite. O próximo passo no meu mapa é <strong>Docker</strong>, porque quero entender
+            o ciclo completo de como software vai ao ar.
+          </p>
+          <p>
+            Busco um estágio onde eu não seja só mão de obra barata. Onde eu possa sentar do lado
+            de alguém que sabe mais e absorver cada detalhe. Se você valoriza quem aprende rápido
+            e não tem medo de fazer perguntas, <strong>a gente precisa conversar.</strong>
+          </p>
+
+          <!-- Grid com infos rápidas tipo "cartão de visita" -->
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">formação</span>
+              <span class="info-val">Eng. de Software · CEUB · 1° sem.</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">cidade</span>
+              <span class="info-val">Taguatinga, DF</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">foco</span>
+              <span class="info-val">Dev Backend</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">início</span>
+              <span class="info-val">Imediato</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       HABILIDADES
+       Fundo escuro pra contrastar com as outras seções
+  ============================================= -->
+  <section id="habilidades" class="skills-section">
+    <div class="wrap">
+      <p class="section-tag reveal">habilidades — sem exagero</p>
+
+      <!-- Cabeçalho da seção em duas colunas -->
+      <div class="skills-intro">
+        <h2 class="section-heading reveal">
+          O que sei fazer<br /><em>agora mesmo.</em>
+        </h2>
+        <p class="skills-intro-desc reveal">
+          Nada de "especialista em tudo". Aqui está um retrato real do meu nível hoje.
+          Progresso honesto vale mais do que currículo inflado.
+        </p>
+      </div>
+
+      <!-- Cards de habilidade com barra de nível animada -->
+      <!-- O data-level define até onde a barra vai (0–100) -->
+      <div class="skills-grid">
+
+        <div class="skill-card reveal" data-level="65">
+          <div class="skill-top">
+            <div class="skill-cat">linguagem principal</div>
+            <div class="skill-pct">65%</div>
+          </div>
+          <div class="skill-name">Python</div>
+          <div class="skill-desc">Scripts · automação · APIs · SQLite · lógica aplicada</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-card reveal" data-level="50">
+          <div class="skill-top">
+            <div class="skill-cat">fundamentos</div>
+            <div class="skill-pct">50%</div>
+          </div>
+          <div class="skill-name">Lógica &amp; Dados</div>
+          <div class="skill-desc">Algoritmos · estruturas de dados · busca · ordenação</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-card reveal" data-level="40">
+          <div class="skill-top">
+            <div class="skill-cat">banco de dados</div>
+            <div class="skill-pct">40%</div>
+          </div>
+          <div class="skill-name">SQL</div>
+          <div class="skill-desc">Consultas básicas · SQLite · modelagem relacional</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-card reveal" data-level="45">
+          <div class="skill-top">
+            <div class="skill-cat">ferramentas</div>
+            <div class="skill-pct">45%</div>
+          </div>
+          <div class="skill-name">Git &amp; Linux</div>
+          <div class="skill-desc">Controle de versão · terminal · bash básico</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <div class="skill-card reveal" data-level="30">
+          <div class="skill-top">
+            <div class="skill-cat">web backend</div>
+            <div class="skill-pct">30%</div>
+          </div>
+          <div class="skill-name">HTTP &amp; APIs</div>
+          <div class="skill-desc">REST · requests · JSON · consumo de APIs públicas</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+        <!-- Card tracejado = ainda não comecei, mas está no radar -->
+        <div class="skill-card skill-card-next reveal" data-level="10">
+          <div class="skill-top">
+            <div class="skill-cat">próximo foco</div>
+            <div class="skill-pct">em breve</div>
+          </div>
+          <div class="skill-name">Docker</div>
+          <div class="skill-desc">Containers · ambientes isolados · deploy básico</div>
+          <div class="skill-bar"><div class="skill-fill"></div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       PROJETOS
+  ============================================= -->
+  <section id="projetos">
+    <div class="wrap">
+      <p class="section-tag reveal">projetos</p>
+      <h2 class="section-heading reveal">Código que escrevi.<br /><em>Problemas que resolvi.</em></h2>
+
+      <div class="proj-list">
+
+        <!-- Cada projeto é um link (troca o # pelo repo no GitHub) -->
+        <a href="#" class="proj-item reveal">
+          <div class="proj-meta">
+            <span class="proj-num">01</span>
+            <div class="proj-chips">
+              <span class="chip">Python</span>
+              <span class="chip">automação</span>
+            </div>
+          </div>
+          <div class="proj-body">
+            <h3 class="proj-name">Automação de tarefas</h3>
+            <p class="proj-desc">
+              Scripts para organizar arquivos, extrair dados e gerar relatórios automaticamente.
+              O objetivo era simples: parar de fazer no braço o que o computador pode fazer sozinho.
+            </p>
+          </div>
+          <span class="proj-arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a href="#" class="proj-item reveal">
+          <div class="proj-meta">
+            <span class="proj-num">02</span>
+            <div class="proj-chips">
+              <span class="chip">Python</span>
+              <span class="chip">REST API</span>
+            </div>
+          </div>
+          <div class="proj-body">
+            <h3 class="proj-name">Consumo de API pública</h3>
+            <p class="proj-desc">
+              Projeto que consome uma API REST, trata os dados JSON e exibe as informações de forma
+              organizada. Primeira vez que vi HTTP de verdade, além do navegador.
+            </p>
+          </div>
+          <span class="proj-arrow" aria-hidden="true">↗</span>
+        </a>
+
+        <a href="#" class="proj-item reveal">
+          <div class="proj-meta">
+            <span class="proj-num">03</span>
+            <div class="proj-chips">
+              <span class="chip">Python</span>
+              <span class="chip">SQLite</span>
+              <span class="chip">CLI</span>
+            </div>
+          </div>
+          <div class="proj-body">
+            <h3 class="proj-name">Sistema de cadastro CLI</h3>
+            <p class="proj-desc">
+              Aplicação de terminal com cadastro, busca e listagem de registros. Primeiro contato
+              real com persistência de dados e a sensação de que "o dado ficou salvo" de verdade.
+            </p>
+          </div>
+          <span class="proj-arrow" aria-hidden="true">↗</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       ROADMAP — onde estou e pra onde vou
+  ============================================= -->
+  <section id="roadmap">
+    <div class="wrap">
+      <p class="section-tag reveal">o que vem a seguir</p>
+      <h2 class="section-heading reveal">Tenho um plano.<br /><em>E estou executando.</em></h2>
+
+      <div class="roadmap-grid">
+
+        <!-- Cor de borda muda conforme o estágio: feito, fazendo, próximo, futuro -->
+        <div class="roadmap-card roadmap-done reveal">
+          <span class="road-icon">✓</span>
+          <div class="road-label">feito</div>
+          <h3 class="road-title">Python sólido</h3>
+          <p class="road-desc">Lógica, estruturas, scripts, APIs, SQLite. Base construída na prática.</p>
+        </div>
+
+        <div class="roadmap-card roadmap-doing reveal">
+          <span class="road-icon">→</span>
+          <div class="road-label">agora</div>
+          <h3 class="road-title">APIs &amp; HTTP fundo</h3>
+          <p class="road-desc">Aprofundando em design de APIs REST, Flask/FastAPI, autenticação básica.</p>
+        </div>
+
+        <div class="roadmap-card roadmap-next reveal">
+          <span class="road-icon">◎</span>
+          <div class="road-label">próximo</div>
+          <h3 class="road-title">Docker</h3>
+          <p class="road-desc">Containers, ambientes, como o código sai da máquina local e vai ao mundo.</p>
+        </div>
+
+        <div class="roadmap-card roadmap-future reveal">
+          <span class="road-icon">○</span>
+          <div class="road-label">planejado</div>
+          <h3 class="road-title">PostgreSQL + deploy</h3>
+          <p class="road-desc">BD relacional mais robusto e entender o ciclo completo de uma aplicação no ar.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       CONTATO — fundo escuro, fecha o site com força
+  ============================================= -->
+  <section id="contato" class="contact-section">
+    <div class="wrap">
+      <p class="section-tag reveal">contato</p>
+
+      <div class="contact-grid">
+
+        <div class="contact-left reveal">
+          <h2 class="contact-heading">
+            Você chegou até aqui.<br />
+            Isso já diz muita coisa.<br />
+            <em>Manda uma mensagem.</em>
+          </h2>
+          <p class="contact-sub">
+            Não precisa ser uma proposta formal. Pode ser um "oi, vi seu portfólio, quero conversar".
+            Respondo rápido.
+          </p>
+        </div>
+
+        <!-- Lista de links de contato com efeito de deslize no hover -->
+        <div class="contact-links reveal">
+          <a href="mailto:gabriel@email.com" class="clink">
+            <span class="clink-label">gabriel@email.com</span>
+            <span class="clink-arrow">→</span>
+          </a>
+          <a href="https://linkedin.com/" target="_blank" rel="noopener" class="clink">
+            <span class="clink-label">LinkedIn</span>
+            <span class="clink-arrow">→</span>
+          </a>
+          <a href="https://github.com/zkkas/" target="_blank" rel="noopener" class="clink">
+            <span class="clink-label">GitHub</span>
+            <span class="clink-arrow">→</span>
+          </a>
+          <a href="https://wa.me/5561999999999" target="_blank" rel="noopener" class="clink">
+            <span class="clink-label">WhatsApp</span>
+            <span class="clink-arrow">→</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Rodapé simples -->
+  <footer>
+    <div class="wrap footer-inner">
+      <span class="footer-copy">© Gabriel 2025 · Eng. de Software CEUB · Taguatinga, DF</span>
+      <div class="footer-links">
+        <a href="https://github.com/zkkas/" target="_blank" rel="noopener">gh</a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener">ln</a>
+        <a href="mailto:gabriel@email.com">email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
